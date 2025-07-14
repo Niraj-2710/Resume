@@ -7,6 +7,7 @@ const LoadingScreen = () => {
   // Indian languages with the company name
   const languages = [
     { text: "99 ટેકનોલેબ", lang: "Gujarati" },
+    { text: "99 Technolab", lang: "English" },
     { text: "99 टेक्नोलैब", lang: "Hindi" },
     { text: "99 టెక్నోలాబ్", lang: "Telugu" },
     { text: "99 டெக்னோலாப்", lang: "Tamil" },

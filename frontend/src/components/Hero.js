@@ -115,7 +115,7 @@ const Hero = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">99 TECHNOLAB</h1>
-              <p className="text-red-400 text-sm">Innovation Beyond Code</p>
+              <p className="text-red-400 text-sm">Innovating Tomorrow's Technology Today</p>
             </div>
           </motion.div>
 
