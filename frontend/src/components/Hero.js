@@ -1,10 +1,60 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Code, Zap, Shield, Cpu } from "lucide-react";
-import Typed from "react-typed";
+
+// Custom typing effect hook
+const useTypingEffect = (strings, speed = 50, backSpeed = 30) => {
+  const [displayText, setDisplayText] = useState("");
+  const [currentStringIndex, setCurrentStringIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (strings.length === 0) return;
+
+    const currentString = strings[currentStringIndex];
+    
+    const timeout = setTimeout(() => {
+      if (isPaused) {
+        setIsPaused(false);
+        setIsDeleting(true);
+        return;
+      }
+
+      if (isDeleting) {
+        setDisplayText(currentString.substring(0, displayText.length - 1));
+        
+        if (displayText.length === 0) {
+          setIsDeleting(false);
+          setCurrentStringIndex((prev) => (prev + 1) % strings.length);
+        }
+      } else {
+        setDisplayText(currentString.substring(0, displayText.length + 1));
+        
+        if (displayText.length === currentString.length) {
+          setIsPaused(true);
+        }
+      }
+    }, isPaused ? 2000 : isDeleting ? backSpeed : speed);
+
+    return () => clearTimeout(timeout);
+  }, [strings, displayText, currentStringIndex, isDeleting, isPaused, speed, backSpeed]);
+
+  return displayText;
+};
 
 const Hero = () => {
   const videoRef = useRef(null);
+  
+  const typingStrings = [
+    "We Build Digital Solutions",
+    "We Create Web Applications",
+    "We Develop Mobile Apps",
+    "We Design User Experiences",
+    "We Innovate Beyond Limits"
+  ];
+
+  const typedText = useTypingEffect(typingStrings);
 
   useEffect(() => {
     // Create a programming animation in the background
@@ -33,12 +83,12 @@ const Hero = () => {
             key={i}
             className="absolute text-red-900 opacity-10 font-mono text-xs md:text-sm"
             initial={{ 
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),
             }}
             animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),
             }}
             transition={{
               duration: 20 + Math.random() * 10,
@@ -103,20 +153,11 @@ const Hero = () => {
             <br />
             <span className="text-red-500">Excellence</span>
           </h2>
-          <div className="text-2xl md:text-3xl text-gray-300 font-light mb-8">
-            <Typed
-              strings={[
-                "We Build Digital Solutions",
-                "We Create Web Applications",
-                "We Develop Mobile Apps",
-                "We Design User Experiences",
-                "We Innovate Beyond Limits"
-              ]}
-              typeSpeed={50}
-              backSpeed={30}
-              loop
-              className="text-red-400"
-            />
+          <div className="text-2xl md:text-3xl text-gray-300 font-light mb-8 h-12 flex items-center justify-center">
+            <span className="text-red-400">
+              {typedText}
+              <span className="animate-pulse">|</span>
+            </span>
           </div>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
             Transform your business with cutting-edge technology solutions. 
