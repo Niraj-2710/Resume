@@ -22,16 +22,16 @@ const useTypingEffect = (strings, speed = 50, backSpeed = 30) => {
       }
 
       if (isDeleting) {
-        setDisplayText(currentString.substring(0, displayText.length - 1));
+        setDisplayText(prev => currentString.substring(0, prev.length - 1));
         
-        if (displayText.length === 0) {
+        if (displayText.length <= 1) {
           setIsDeleting(false);
           setCurrentStringIndex((prev) => (prev + 1) % strings.length);
         }
       } else {
-        setDisplayText(currentString.substring(0, displayText.length + 1));
+        setDisplayText(prev => currentString.substring(0, prev.length + 1));
         
-        if (displayText.length === currentString.length) {
+        if (displayText.length >= currentString.length - 1) {
           setIsPaused(true);
         }
       }
